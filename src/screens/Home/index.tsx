@@ -13,6 +13,7 @@ import { CardMovies } from "../../components/CardMovies";
 import { api } from "../../services/api";
 
 import { styles } from "./styles";
+import { useNavigation } from "@react-navigation/native";
 
 interface Movie {
   id: number;
@@ -73,6 +74,16 @@ export function Home() {
     }
   };
 
+  //criar função de renderMovieItem
+  const navigation = useNavigation();
+
+  const renderMovieItem = ({ item }: { item: Movie }) => (
+    <CardMovies
+      data={item}
+      onPress={() => navigation.navigate("Details", { movieId: item.id })}
+    />
+  );
+
   const movieData = search.length > 2 ? searchResultMovies : discoveryMovies;
 
   return (
@@ -101,7 +112,7 @@ export function Home() {
         <FlatList
           data={movieData}
           numColumns={3}
-          renderItem={(item) => <CardMovies data={item.item} />}
+          renderItem={renderMovieItem}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{
